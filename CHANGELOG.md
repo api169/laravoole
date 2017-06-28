@@ -1,3 +1,8 @@
+0.5.3
+-----
+
+- start the swoole process directly,not by popen,so it can use supervisor to manager the process
+
 0.5.0
 -----
 
