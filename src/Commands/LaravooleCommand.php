@@ -6,6 +6,7 @@ use ReflectionClass;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Laravoole\Server;
 
 class LaravooleCommand extends Command
 {
@@ -154,9 +155,8 @@ class LaravooleCommand extends Command
             'base_config' => config('laravoole.base_config'),
         ];
 
-        $handle = popen(PHP_BINARY . ' ' . __DIR__ . '/../../src/Entry.php', 'w');
-        fwrite($handle, serialize($configs));
-        fclose($handle);
+	$server = new Server($configs['wrapper'], $configs['wrapper_file']);
+        $server->start($configs);
     }
 
     protected function getPid()

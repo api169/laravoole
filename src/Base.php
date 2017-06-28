@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Psr\Http\Message\ServerRequestInterface;
 
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 abstract class Base
 {
@@ -65,16 +64,6 @@ abstract class Base
 
     public function prepareKernel()
     {
-        // unregister temporary autoloader
-        foreach (spl_autoload_functions() as $function) {
-            spl_autoload_unregister($function);
-        }
-
-        if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-            require __DIR__ . '/../vendor/autoload.php';
-        } else {
-            require $this->root_dir . '/bootstrap/autoload.php';
-        }
         if (isset($this->base_config['callbacks']['bootstraping'])) {
             foreach ($this->base_config['callbacks']['bootstraping'] as $callback) {
                 $callback($this);
@@ -183,7 +172,8 @@ abstract class Base
 
         $content = $request->rawContent() ?: null;
 
-        return new $classname($get, $post, []/* attributes */, $cookie, $files, $server, $content);
+	$symfonyRequest = new SymfonyRequest($get, $post, [], $cookie, $files, $server, $content);
+        return IlluminateRequest::createFromBase($symfonyRequest);
     }
 
     protected function clean(IlluminateRequest $request)
