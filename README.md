@@ -3,6 +3,15 @@
 Laravel on Swoole Or Workerman
 
 10x faster than php-fpm
+forked from [garveen/laravoole](https://github.com/garveen/laravoole)
+
+## Update Log
+### 0.5.2
+> ## hotfix
+> request can not get params from json
+> ## feature
+> start the swoole process directly,not by popen
+
 
 [![Latest Stable Version](https://poser.pugx.org/garveen/laravoole/v/stable)](https://packagist.org/packages/garveen/laravoole)
 [![Total Downloads](https://poser.pugx.org/garveen/laravoole/downloads)](https://packagist.org/packages/garveen/laravoole)
@@ -268,7 +277,7 @@ server {
     root /path/to/laravel/public;
 
     location / {
-            try_files $uri $uri/ @laravoole;
+            try_files $uri $uri @laravoole;
             index  index.html index.htm index.php;
         }
 
