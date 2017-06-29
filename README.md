@@ -48,13 +48,13 @@ forked from [garveen/laravoole](https://github.com/garveen/laravoole)
 To get started, add laravoole to you composer.json file and run `composer update`:
 
 ```
-"garveen/laravoole": "^0.5.0"
+"unfazed/laravoole": "^0.5.0"
 ```
 
 or just run shell command:
 
 ```shell
- composer require garveen/laravoole
+ composer require unfazed/laravoole
 ```
 
 Once composer done its job, you need to register Laravel service provider, in your config/app.php:
@@ -279,18 +279,21 @@ server {
 
     # http
     location @laravoole {
-        proxy_set_header   Host $host:$server_port;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_http_version 1.1;
+			proxy_set_header   Host $host;
+			proxy_set_header   X-Forwarded-Host $host;
+			proxy_set_header   X-Forwarded-Port $server_port;
+			proxy_set_header   X-Forwarded-Proto $scheme;
+			proxy_set_header   X-Real-IP $remote_addr;
+			proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_http_version 1.1;
 
-        proxy_pass http://127.0.0.1:9050;
+			proxy_pass http://127.0.0.1:9050;
     }
 
     # fastcgi
     location @laravoole {
-        include fastcgi_params;
-        fastcgi_pass 127.0.0.1:9050;
+			include fastcgi_params;
+			fastcgi_pass 127.0.0.1:9050;
     }
 
     # websocket
