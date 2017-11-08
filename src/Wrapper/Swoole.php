@@ -84,6 +84,13 @@ abstract class Swoole extends Base
     public function onWorkerStart($serv, $worker_id)
     {
         parent::prepareKernel();
+
+        if (extension_loaded('Zend OPcache')) {
+            if (!empty(opcache_get_status())) {
+                opcache_reset();
+            }
+        }
+
         $server = $this->server;
         $this->app->singleton('laravoole.server', function ($app) use ($server) {
             return $server;
